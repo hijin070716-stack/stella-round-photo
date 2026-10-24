@@ -1,0 +1,23 @@
+Stella Survival - Cloudflare Pages 이전 버전
+
+이 버전은 Netlify Functions를 Cloudflare Pages Functions로 옮긴 버전입니다.
+기존 index.html 디자인/라운드/참가자 기능을 유지하고 API 경로를 /api/stella-api로 변경했습니다.
+사진/GIF와 사이트 설정은 기존 Supabase 프로젝트에 저장됩니다. 기존 Supabase 데이터를 삭제하거나 새 프로젝트를 만들 필요가 없습니다.
+
+배포 방법(권장: GitHub 연동)
+1. ZIP을 풀고 모든 파일을 GitHub 저장소의 루트에 업로드합니다. index.html과 functions 폴더가 저장소 최상위에 있어야 합니다.
+2. Cloudflare 대시보드 > Workers & Pages > Create > Pages > Connect to Git에서 해당 저장소를 연결합니다.
+3. Framework preset은 None, Build command는 비워 두고, Build output directory는 . (저장소 루트)로 지정합니다.
+4. Pages 프로젝트 Settings > Variables and Secrets에서 다음 변수를 설정합니다.
+   SUPABASE_URL = 기존 Supabase Project URL (https://프로젝트ID.supabase.co)
+   SUPABASE_SERVICE_ROLE_KEY = 기존 Supabase service_role/secret key (비밀값으로 저장)
+   ADMIN_PASSWORD = 기존 관리자 비밀번호
+5. 배포가 끝나면 https://프로젝트이름.pages.dev 로 접속합니다.
+6. 관리자 로그인 후 라운드와 참가자 정보가 보이는지 확인하고, 테스트용 사진 한 장을 업로드한 뒤 새로고침해 저장을 확인합니다.
+
+중요
+- 기존 Supabase 프로젝트와 테이블 public.app_state, Storage의 stella-media 버킷을 그대로 사용합니다. 기존 데이터가 없어진 것으로 보이더라도 SQL을 다시 실행하거나 데이터를 초기화하지 말고 먼저 프로젝트 URL이 맞는지 확인하세요.
+- SUPABASE_SERVICE_ROLE_KEY는 절대로 index.html, GitHub 코드, 공개 환경 변수에 넣지 마세요. Cloudflare 대시보드의 비밀 환경 변수로만 설정하세요.
+- Cloudflare Pages 대시보드의 단순 드래그앤드롭 업로드는 Functions 배포를 지원하지 않을 수 있습니다. 이 ZIP은 functions/api/stella-api.js를 포함하므로 Git 연동 또는 Wrangler를 통한 Pages 배포를 사용하세요.
+- 무료 플랜에도 요청량/저장 용량 제한이 있을 수 있습니다. 사이트 제작 크레딧과는 별개입니다.
+- 사진/GIF 업로드 한도는 파일당 20MB로 설정되어 있습니다. Supabase 프로젝트의 실제 Storage 제한이 더 낮으면 업로드가 거부될 수 있습니다.
